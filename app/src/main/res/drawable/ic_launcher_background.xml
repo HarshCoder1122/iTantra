@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path android:pathData="M0,0h108v108h-108z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="0"
+                android:startY="0"
+                android:endX="108"
+                android:endY="108"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#F0FDF4" />
+                <item android:offset="0.5" android:color="#DCFCE7" />
+                <item android:offset="1.0" android:color="#BBF7D0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- Technical telemetry grid lines -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#1F16A34A"
+        android:strokeWidth="0.75"
+        android:pathData="M0,27L108,27 M0,54L108,54 M0,81L108,81 M27,0L27,108 M54,0L54,108 M81,0L81,108" />
+    <!-- Subtle orbital ring -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#3316A34A"
+        android:strokeWidth="1.2"
+        android:pathData="M54,54 m-36,0 a36,36 0 1,0 72,0 a36,36 0 1,0 -72,0" />
+</vector>

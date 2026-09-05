@@ -1,0 +1,244 @@
+{
+  "schemaVersion": 2,
+  "engine": "sherpa-onnx (Apache-2.0) STT/VAD + ONNX Runtime Mobile (MIT) TTS",
+  "offlineOnly": true,
+  "vad": {
+    "id": "silero_vad",
+    "name": "Silero VAD v4 (real ONNX model, not a heuristic)",
+    "file": "vad/silero_vad.onnx",
+    "source": "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/silero_vad.onnx",
+    "sampleRateHz": 16000,
+    "windowSizeSamples": 512
+  },
+  "languages": {
+    "hi": {
+      "englishName": "Hindi",
+      "stt": {
+        "id": "ai4bharat_indicconformer_hi",
+        "name": "AI4Bharat IndicConformer (hybrid CTC/RNNT, CTC branch), INT8",
+        "architecture": "Conformer-Large, 120M params",
+        "sourceModel": "ai4bharat/indicconformer_stt_hi_hybrid_ctc_rnnt_large",
+        "onnxExport": "trysem/indicconformer-120m-onnx (CC-BY-4.0)",
+        "modelType": "nemo_ctc",
+        "model": "hi/stt/model.int8.onnx",
+        "tokens": "hi/stt/tokens.txt",
+        "sampleRateHz": 16000,
+        "featureDim": 80
+      },
+      "tts": {
+        "id": "ai4bharat_indictts_hi",
+        "name": "AI4Bharat Indic-TTS FastPitch (INT8) + HiFi-GAN V1",
+        "sourceModel": "AI4Bharat/Indic-TTS hi.zip (MIT)",
+        "acoustic": "hi/tts/fastpitch.int8.onnx",
+        "vocoder": "hi/tts/hifigan.onnx",
+        "frontend": "hi/tts/frontend.json",
+        "sampleRateHz": 22050
+      }
+    },
+    "en": {
+      "englishName": "English",
+      "stt": null,
+      "tts": {
+        "id": "ai4bharat_indictts_en",
+        "name": "AI4Bharat Indic-TTS FastPitch (INT8) + HiFi-GAN V1",
+        "sourceModel": "AI4Bharat/Indic-TTS en.zip (MIT)",
+        "acoustic": "en/tts/fastpitch.int8.onnx",
+        "vocoder": "en/tts/hifigan.onnx",
+        "frontend": "en/tts/frontend.json",
+        "sampleRateHz": 22050
+      }
+    },
+    "bn": {
+      "englishName": "Bengali",
+      "stt": {
+        "id": "ai4bharat_indicconformer_bn",
+        "name": "AI4Bharat IndicConformer (hybrid CTC/RNNT, CTC branch), INT8",
+        "architecture": "Conformer-Large, 120M params",
+        "sourceModel": "ai4bharat/indicconformer_stt_bn_hybrid_ctc_rnnt_large",
+        "onnxExport": "trysem/indicconformer-120m-onnx (CC-BY-4.0)",
+        "modelType": "nemo_ctc",
+        "model": "bn/stt/model.int8.onnx",
+        "tokens": "bn/stt/tokens.txt",
+        "sampleRateHz": 16000,
+        "featureDim": 80
+      },
+      "tts": {
+        "id": "ai4bharat_indictts_bn",
+        "name": "AI4Bharat Indic-TTS FastPitch (INT8) + HiFi-GAN V1",
+        "sourceModel": "AI4Bharat/Indic-TTS bn.zip (MIT)",
+        "acoustic": "bn/tts/fastpitch.int8.onnx",
+        "vocoder": "bn/tts/hifigan.onnx",
+        "frontend": "bn/tts/frontend.json",
+        "sampleRateHz": 22050
+      }
+    },
+    "gu": {
+      "englishName": "Gujarati",
+      "stt": {
+        "id": "ai4bharat_indicconformer_gu",
+        "name": "AI4Bharat IndicConformer (hybrid CTC/RNNT, CTC branch), INT8",
+        "architecture": "Conformer-Large, 120M params",
+        "sourceModel": "ai4bharat/indicconformer_stt_gu_hybrid_ctc_rnnt_large",
+        "onnxExport": "trysem/indicconformer-120m-onnx (CC-BY-4.0)",
+        "modelType": "nemo_ctc",
+        "model": "gu/stt/model.int8.onnx",
+        "tokens": "gu/stt/tokens.txt",
+        "sampleRateHz": 16000,
+        "featureDim": 80
+      },
+      "tts": {
+        "id": "ai4bharat_indictts_gu",
+        "name": "AI4Bharat Indic-TTS FastPitch (INT8) + HiFi-GAN V1",
+        "sourceModel": "AI4Bharat/Indic-TTS gu.zip (MIT)",
+        "acoustic": "gu/tts/fastpitch.int8.onnx",
+        "vocoder": "gu/tts/hifigan.onnx",
+        "frontend": "gu/tts/frontend.json",
+        "sampleRateHz": 22050
+      }
+    },
+    "kn": {
+      "englishName": "Kannada",
+      "stt": {
+        "id": "ai4bharat_indicconformer_kn",
+        "name": "AI4Bharat IndicConformer (hybrid CTC/RNNT, CTC branch), INT8",
+        "architecture": "Conformer-Large, 120M params",
+        "sourceModel": "ai4bharat/indicconformer_stt_kn_hybrid_ctc_rnnt_large",
+        "onnxExport": "trysem/indicconformer-120m-onnx (CC-BY-4.0)",
+        "modelType": "nemo_ctc",
+        "model": "kn/stt/model.int8.onnx",
+        "tokens": "kn/stt/tokens.txt",
+        "sampleRateHz": 16000,
+        "featureDim": 80
+      },
+      "tts": {
+        "id": "ai4bharat_indictts_kn",
+        "name": "AI4Bharat Indic-TTS FastPitch (INT8) + HiFi-GAN V1",
+        "sourceModel": "AI4Bharat/Indic-TTS kn.zip (MIT)",
+        "acoustic": "kn/tts/fastpitch.int8.onnx",
+        "vocoder": "kn/tts/hifigan.onnx",
+        "frontend": "kn/tts/frontend.json",
+        "sampleRateHz": 22050
+      }
+    },
+    "ml": {
+      "englishName": "Malayalam",
+      "stt": {
+        "id": "ai4bharat_indicconformer_ml",
+        "name": "AI4Bharat IndicConformer (hybrid CTC/RNNT, CTC branch), INT8",
+        "architecture": "Conformer-Large, 120M params",
+        "sourceModel": "ai4bharat/indicconformer_stt_ml_hybrid_ctc_rnnt_large",
+        "onnxExport": "trysem/indicconformer-120m-onnx (CC-BY-4.0)",
+        "modelType": "nemo_ctc",
+        "model": "ml/stt/model.int8.onnx",
+        "tokens": "ml/stt/tokens.txt",
+        "sampleRateHz": 16000,
+        "featureDim": 80
+      },
+      "tts": {
+        "id": "ai4bharat_indictts_ml",
+        "name": "AI4Bharat Indic-TTS FastPitch (INT8) + HiFi-GAN V1",
+        "sourceModel": "AI4Bharat/Indic-TTS ml.zip (MIT)",
+        "acoustic": "ml/tts/fastpitch.int8.onnx",
+        "vocoder": "ml/tts/hifigan.onnx",
+        "frontend": "ml/tts/frontend.json",
+        "sampleRateHz": 22050
+      }
+    },
+    "mr": {
+      "englishName": "Marathi",
+      "stt": {
+        "id": "ai4bharat_indicconformer_mr",
+        "name": "AI4Bharat IndicConformer (hybrid CTC/RNNT, CTC branch), INT8",
+        "architecture": "Conformer-Large, 120M params",
+        "sourceModel": "ai4bharat/indicconformer_stt_mr_hybrid_ctc_rnnt_large",
+        "onnxExport": "trysem/indicconformer-120m-onnx (CC-BY-4.0)",
+        "modelType": "nemo_ctc",
+        "model": "mr/stt/model.int8.onnx",
+        "tokens": "mr/stt/tokens.txt",
+        "sampleRateHz": 16000,
+        "featureDim": 80
+      },
+      "tts": {
+        "id": "ai4bharat_indictts_mr",
+        "name": "AI4Bharat Indic-TTS FastPitch (INT8) + HiFi-GAN V1",
+        "sourceModel": "AI4Bharat/Indic-TTS mr.zip (MIT)",
+        "acoustic": "mr/tts/fastpitch.int8.onnx",
+        "vocoder": "mr/tts/hifigan.onnx",
+        "frontend": "mr/tts/frontend.json",
+        "sampleRateHz": 22050
+      }
+    },
+    "ta": {
+      "englishName": "Tamil",
+      "stt": {
+        "id": "ai4bharat_indicconformer_ta",
+        "name": "AI4Bharat IndicConformer (hybrid CTC/RNNT, CTC branch), INT8",
+        "architecture": "Conformer-Large, 120M params",
+        "sourceModel": "ai4bharat/indicconformer_stt_ta_hybrid_ctc_rnnt_large",
+        "onnxExport": "trysem/indicconformer-120m-onnx (CC-BY-4.0)",
+        "modelType": "nemo_ctc",
+        "model": "ta/stt/model.int8.onnx",
+        "tokens": "ta/stt/tokens.txt",
+        "sampleRateHz": 16000,
+        "featureDim": 80
+      },
+      "tts": {
+        "id": "ai4bharat_indictts_ta",
+        "name": "AI4Bharat Indic-TTS FastPitch (INT8) + HiFi-GAN V1",
+        "sourceModel": "AI4Bharat/Indic-TTS ta.zip (MIT)",
+        "acoustic": "ta/tts/fastpitch.int8.onnx",
+        "vocoder": "ta/tts/hifigan.onnx",
+        "frontend": "ta/tts/frontend.json",
+        "sampleRateHz": 22050
+      }
+    },
+    "te": {
+      "englishName": "Telugu",
+      "stt": {
+        "id": "ai4bharat_indicconformer_te",
+        "name": "AI4Bharat IndicConformer (hybrid CTC/RNNT, CTC branch), INT8",
+        "architecture": "Conformer-Large, 120M params",
+        "sourceModel": "ai4bharat/indicconformer_stt_te_hybrid_ctc_rnnt_large",
+        "onnxExport": "trysem/indicconformer-120m-onnx (CC-BY-4.0)",
+        "modelType": "nemo_ctc",
+        "model": "te/stt/model.int8.onnx",
+        "tokens": "te/stt/tokens.txt",
+        "sampleRateHz": 16000,
+        "featureDim": 80
+      },
+      "tts": {
+        "id": "ai4bharat_indictts_te",
+        "name": "AI4Bharat Indic-TTS FastPitch (INT8) + HiFi-GAN V1",
+        "sourceModel": "AI4Bharat/Indic-TTS te.zip (MIT)",
+        "acoustic": "te/tts/fastpitch.int8.onnx",
+        "vocoder": "te/tts/hifigan.onnx",
+        "frontend": "te/tts/frontend.json",
+        "sampleRateHz": 22050
+      }
+    },
+    "or": {
+      "englishName": "Odia",
+      "stt": {
+        "id": "ai4bharat_indicconformer_or",
+        "name": "AI4Bharat IndicConformer (hybrid CTC/RNNT, CTC branch), INT8",
+        "architecture": "Conformer-Large, 120M params",
+        "sourceModel": "ai4bharat/indicconformer_stt_or_hybrid_ctc_rnnt_large",
+        "onnxExport": "trysem/indicconformer-120m-onnx (CC-BY-4.0)",
+        "modelType": "nemo_ctc",
+        "model": "or/stt/model.int8.onnx",
+        "tokens": "or/stt/tokens.txt",
+        "sampleRateHz": 16000,
+        "featureDim": 80
+      },
+      "tts": {
+        "id": "ai4bharat_indictts_or",
+        "name": "AI4Bharat Indic-TTS FastPitch (INT8) + HiFi-GAN V1",
+        "sourceModel": "AI4Bharat/Indic-TTS or.zip (MIT)",
+        "acoustic": "or/tts/fastpitch.int8.onnx",
+        "vocoder": "or/tts/hifigan.onnx",
+        "frontend": "or/tts/frontend.json",
+        "sampleRateHz": 22050
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+*.iml
+.gradle
+.kotlin
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+.env
+debug.keystore
+
+# Bundled offline STT/TTS model weights (multi-GB, individual files exceed GitHub's
+# 100MB limit) — keep the manifest + tiny tokenizer/frontend configs tracked so the
+# language-pack structure is visible, but not the binaries themselves. See the
+# README's "Model weights" section for how to (re)generate these with
+# tools/model_conversion/.
+app/src/main/assets/models/**/*.onnx
+
+# Python virtualenv accidentally left under the model-conversion tooling.
+tools/model_conversion/venv/
+
+# Stray local artifact, not referenced by build.gradle.kts.
+app/libs/*.bak

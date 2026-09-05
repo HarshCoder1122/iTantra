@@ -1,0 +1,6 @@
+{
+  "name": "iTantra",
+  "description": "Offline low-power multilingual voice walkie-talkie for India's ISRO disaster alert and space ecosystem",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,45 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Center coordinate: 54, 54 -->
+    <!-- Satellite dish parabola -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M39,68 C39,52 48,40 64,36 L66,41 C53,44 45,54 45,68 Z" />
+    <!-- Dish receiver horn and strut -->
+    <path
+        android:fillColor="#FF9933"
+        android:pathData="M58,42 L70,30 L73,33 L62,44 Z" />
+    <!-- Small sub-dish emitter -->
+    <path
+        android:fillColor="#138808"
+        android:pathData="M71,28 C73,26 76,28 77,30 C78,32 76,35 74,36 L69,32 Z" />
+    <!-- Base mounting pedestal -->
+    <path
+        android:fillColor="#16A34A"
+        android:pathData="M37,67 L45,67 L48,76 L34,76 Z" />
+    <path
+        android:fillColor="#15803D"
+        android:pathData="M30,76 L52,76 L52,79 L30,79 Z" />
+    <!-- RF Signal wave arcs (Saffron, Deep Green, Emerald) -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF9933"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M77,26 C82,31 84,38 82,45" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#15803D"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M83,20 C91,27 94,37 91,48" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#16A34A"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M89,14 C100,23 103,36 99,51" />
+</vector>

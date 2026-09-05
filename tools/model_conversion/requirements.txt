@@ -1,0 +1,6 @@
+onnx
+onnxruntime
+huggingface_hub
+numpy
+soundfile
+sherpa-onnx
