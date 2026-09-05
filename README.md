@@ -32,8 +32,19 @@ No internet. No cell towers. No cloud. Speak in your language, the person on the
 
 <br/>
 
+## Demo
+
+<div align="center">
+
+<video src="docs/demo.mp4" controls width="360">Your browser doesn't support inline video — <a href="docs/demo.mp4">download/watch it here</a> instead.</video>
+
+<sub>If the player above doesn't load, [watch/download the MP4 directly](docs/demo.mp4).</sub>
+
+</div>
+
 ## Table of contents
 
+- [Demo](#demo)
 - [Why](#why)
 - [Features](#features)
 - [Screenshots](#screenshots)
