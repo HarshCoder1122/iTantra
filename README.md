@@ -78,13 +78,14 @@ Built for the Smart India Hackathon around a disaster-management / space-comms (
 <div align="center">
 <table>
 <tr>
-<td align="center" width="20%"><img src="docs/screenshots/walkie.png" width="200"/><br/><b>Walkie-Talkie</b><br/><sub>Push-to-talk & voice-activated modes</sub></td>
-<td align="center" width="20%"><img src="docs/screenshots/mesh-link.png" width="200"/><br/><b>Mesh Link</b><br/><sub>Peer discovery over Wi-Fi/BT/BLE</sub></td>
-<td align="center" width="20%"><img src="docs/screenshots/messages.png" width="200"/><br/><b>Messages</b><br/><sub>Archived voice transcripts</sub></td>
-<td align="center" width="20%"><img src="docs/screenshots/sos.png" width="200"/><br/><b>Emergency SOS</b><br/><sub>Priority distress broadcast</sub></td>
-<td align="center" width="20%"><img src="docs/screenshots/settings.png" width="200"/><br/><b>Settings</b><br/><sub>On-device model status</sub></td>
+<td align="center" width="25%"><img src="docs/screenshots/mesh-link.png" width="210"/><br/><b>Mesh Link</b><br/><sub>Peer discovery over Wi-Fi/BT/BLE</sub></td>
+<td align="center" width="25%"><img src="docs/screenshots/messages.png" width="210"/><br/><b>Messages</b><br/><sub>Archived voice transcripts</sub></td>
+<td align="center" width="25%"><img src="docs/screenshots/sos.png" width="210"/><br/><b>Emergency SOS</b><br/><sub>Priority distress broadcast</sub></td>
+<td align="center" width="25%"><img src="docs/screenshots/settings.png" width="210"/><br/><b>Settings</b><br/><sub>On-device model status</sub></td>
 </tr>
 </table>
+
+<sub>Walkie-Talkie screen coming soon.</sub>
 </div>
 
 ## How it works
