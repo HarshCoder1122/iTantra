@@ -11,6 +11,7 @@ import android.util.Log
 import com.example.audio.AlertAudioManager
 import com.example.model.BundledModelManager
 import com.example.model.SupportedLanguage
+import com.example.model.recommendedOrtThreads
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -149,11 +150,16 @@ class IndicTtsEngine(
                     defaultSpeakerId = root.optInt("defaultSpeakerId", 0),
                 )
 
-                // 1 thread each: two small sessions running back-to-back per utterance,
-                // not a latency-critical streaming path — extra ORT worker threads would
-                // only add scratch-buffer memory and scheduling overhead on weak CPUs.
+                // Scale intra-op threads with actual device capability (see
+                // recommendedOrtThreads) rather than hardcoding 1 — a capable device
+                // synthesizes noticeably faster with 2 worker threads, while a weak/
+                // low-RAM one stays at 1 to avoid the extra scratch-buffer memory and
+                // scheduling overhead. Always 1 inter-op thread: FastPitch and HiFi-GAN
+                // run back-to-back per utterance, not concurrently, so there's nothing
+                // for inter-op parallelism to actually parallelize.
+                val threads = recommendedOrtThreads(context)
                 val sessionOptions = OrtSession.SessionOptions().apply {
-                    setIntraOpNumThreads(1)
+                    setIntraOpNumThreads(threads)
                     setInterOpNumThreads(1)
                     setMemoryPatternOptimization(true)
                 }
@@ -388,6 +394,10 @@ class IndicTtsEngine(
             offset += written
         }
         return pcm.size
+    }
+
+    override fun preload(language: SupportedLanguage) {
+        scope.launch(Dispatchers.Default) { ensureModelsForLanguage(language) }
     }
 
     override fun stop() {

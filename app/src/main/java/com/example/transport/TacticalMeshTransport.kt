@@ -449,7 +449,12 @@ class TacticalMeshTransport(
                 val scanSettings = ScanSettings.Builder()
                     .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
                     .build()
-                bleScanner?.startScan(null, scanSettings, bleScanCallback)
+                // Filter to the iTantra mesh service UUID (advertised below) instead of
+                // scanning unfiltered — an unfiltered scan (filters=null) surfaces every
+                // BLE device in range (earbuds, fitness bands, smart bulbs...), not just
+                // other iTantra installs.
+                val scanFilters = listOf(ScanFilter.Builder().setServiceUuid(bleServiceUuid).build())
+                bleScanner?.startScan(scanFilters, scanSettings, bleScanCallback)
                 isBleScanning = true
                 Log.i("TacticalMesh", "BLE Scanner active")
             }
@@ -853,21 +858,55 @@ class TacticalMeshTransport(
     // Bluetooth Helpers & Peer Pruning
     // ==========================================
 
+    /** RSSI seen at ACTION_FOUND time, keyed by address, consumed once the matching
+     *  ACTION_UUID answer confirms (or rules out) iTantra mesh membership below. */
+    private val pendingBtRssi = ConcurrentHashMap<String, Int>()
+
+    private fun extractBluetoothDeviceExtra(intent: Intent?): BluetoothDevice? {
+        if (intent == null) return null
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE, BluetoothDevice::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+        }
+    }
+
+    /** True if [uuids] (a device's SDP service record) includes the iTantra mesh
+     *  RFCOMM service — the same signal used to gate both fresh discovery
+     *  ([registerBluetoothDiscoveryReceiver]) and already-bonded devices below. */
+    private fun advertisesMeshService(uuids: Array<ParcelUuid>?): Boolean {
+        return uuids?.any { it.uuid == meshBluetoothUuid } ?: false
+    }
+
     private fun refreshBondedBluetoothPeers() {
         try {
             val adapter = bluetoothAdapter
             if (adapter != null && adapter.isEnabled) {
                 val bonded = adapter.bondedDevices ?: emptySet()
                 for (device in bonded) {
-                    val peer = PeerDevice(
-                        id = device.address,
-                        name = device.name ?: "Paired Bluetooth Phone",
-                        address = device.address,
-                        protocol = TransportProtocol.BLUETOOTH,
-                        signalStrengthDbm = -58
-                    )
-                    peerMap[device.address] = peer
-                    peerLastSeen[device.address] = System.currentTimeMillis()
+                    // Only surface a bonded device as a mesh "peer" if its (cached, from
+                    // pairing time) SDP record actually registers the iTantra RFCOMM
+                    // service — otherwise every paired headset, car kit, or laptop shows
+                    // up as a connectable peer for no reason.
+                    val cachedUuids = try { device.uuids } catch (e: Exception) { null }
+                    if (advertisesMeshService(cachedUuids)) {
+                        val peer = PeerDevice(
+                            id = device.address,
+                            name = device.name ?: "Paired iTantra Node",
+                            address = device.address,
+                            protocol = TransportProtocol.BLUETOOTH,
+                            signalStrengthDbm = -58
+                        )
+                        peerMap[device.address] = peer
+                        peerLastSeen[device.address] = System.currentTimeMillis()
+                    } else {
+                        // Cached record may just be stale (paired before this device ever
+                        // ran iTantra, or before an app update) — ask again; the shared
+                        // ACTION_UUID handler below will add it if the fresh answer
+                        // confirms mesh membership.
+                        try { device.fetchUuidsWithSdp() } catch (e: Exception) {}
+                    }
                 }
                 _discoveredPeers.value = peerMap.values.toList()
             }
@@ -878,28 +917,42 @@ class TacticalMeshTransport(
 
     private fun registerBluetoothDiscoveryReceiver() {
         val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+        filter.addAction(BluetoothDevice.ACTION_UUID)
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(c: Context?, intent: Intent?) {
-                if (intent?.action == BluetoothDevice.ACTION_FOUND) {
-                    val device: BluetoothDevice? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE, BluetoothDevice::class.java)
-                    } else {
-                        @Suppress("DEPRECATION")
-                        intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
-                    }
-                    val rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE).toInt()
+                val device = extractBluetoothDeviceExtra(intent) ?: return
+                when (intent?.action) {
+                    BluetoothDevice.ACTION_FOUND -> {
+                        val rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE).toInt()
+                        if (rssi != Short.MIN_VALUE.toInt()) pendingBtRssi[device.address] = rssi
 
-                    device?.let {
-                        val peer = PeerDevice(
-                            id = it.address,
-                            name = it.name ?: "Nearby Bluetooth Device",
-                            address = it.address,
-                            protocol = TransportProtocol.BLUETOOTH,
-                            signalStrengthDbm = if (rssi != Short.MIN_VALUE.toInt()) rssi else -65
-                        )
-                        peerMap[it.address] = peer
-                        peerLastSeen[it.address] = System.currentTimeMillis()
-                        _discoveredPeers.value = peerMap.values.toList()
+                        // A raw "device found" event says nothing about whether this is
+                        // another iTantra install versus a random nearby phone, speaker,
+                        // or headset — ask for its SDP record and decide once ACTION_UUID
+                        // answers below, instead of listing it immediately.
+                        try { device.fetchUuidsWithSdp() } catch (e: Exception) {}
+                    }
+                    BluetoothDevice.ACTION_UUID -> {
+                        val uuidsExtra: Array<ParcelUuid>? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID, ParcelUuid::class.java)
+                        } else {
+                            @Suppress("DEPRECATION", "UNCHECKED_CAST")
+                            intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID) as? Array<ParcelUuid>
+                        }
+                        val rssi = pendingBtRssi.remove(device.address)
+                        if (advertisesMeshService(uuidsExtra)) {
+                            val peer = PeerDevice(
+                                id = device.address,
+                                name = try { device.name } catch (e: SecurityException) { null }
+                                    ?: "iTantra Node ${device.address.takeLast(5)}",
+                                address = device.address,
+                                protocol = TransportProtocol.BLUETOOTH,
+                                signalStrengthDbm = rssi ?: -65
+                            )
+                            peerMap[device.address] = peer
+                            peerLastSeen[device.address] = System.currentTimeMillis()
+                            _discoveredPeers.value = peerMap.values.toList()
+                        }
                     }
                 }
             }

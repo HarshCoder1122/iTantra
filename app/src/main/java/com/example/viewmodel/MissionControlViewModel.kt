@@ -143,6 +143,12 @@ class MissionControlViewModel(application: Application) : AndroidViewModel(appli
                 handleIncomingPacket(packet)
             }
         }
+
+        // Warm the initially-selected language's TTS models in the background at
+        // startup rather than waiting for the first speak() call — moves the cold
+        // model-load cost off the interactive path (Test voice / first incoming
+        // message) since it can overlap with the user just looking at the UI.
+        ttsEngine.preload(_uiState.value.selectedLanguage)
     }
 
     // ==========================================
@@ -213,6 +219,7 @@ class MissionControlViewModel(application: Application) : AndroidViewModel(appli
     fun setSelectedLanguage(lang: SupportedLanguage) {
         _uiState.value = _uiState.value.copy(selectedLanguage = lang)
         sttEngine.setLanguage(lang)
+        ttsEngine.preload(lang)
     }
 
     fun setForceMaxVolumeAlerts(force: Boolean) {

@@ -23,6 +23,12 @@ interface TtsEngine {
         onDone: () -> Unit = {}
     )
 
+    /** Warms up [language]'s FastPitch/HiFi-GAN sessions in the background without
+     *  speaking anything, so the model is already resident by the time the user
+     *  actually presses "Test voice" or a packet in this language arrives — moves
+     *  the cold-load cost off the interactive path instead of eliminating it. */
+    fun preload(language: SupportedLanguage)
+
     fun stop()
     fun shutdown()
 }

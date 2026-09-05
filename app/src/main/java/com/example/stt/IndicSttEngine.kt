@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import com.example.model.BundledModelManager
 import com.example.model.SupportedLanguage
 import com.example.model.VadStatus
+import com.example.model.recommendedOrtThreads
 import com.k2fsa.sherpa.onnx.FeatureConfig
 import com.k2fsa.sherpa.onnx.OfflineModelConfig
 import com.k2fsa.sherpa.onnx.OfflineNemoEncDecCtcModelConfig
@@ -187,6 +188,12 @@ class IndicSttEngine(
                 val sttModelFile = extractAssetToFile(sttAsset.modelPath)
                 val sttTokensFile = extractAssetToFile(sttAsset.tokensPath)
 
+                // Scale with actual device capability (see recommendedOrtThreads):
+                // capable hardware decodes noticeably faster with a second worker
+                // thread, while a weak/low-RAM device stays at 1 to avoid the extra
+                // scratch-buffer memory and scheduling contention that buys it nothing.
+                val threads = recommendedOrtThreads(context)
+
                 val newVad = Vad(
                     assetManager = null,
                     config = VadModelConfig(
@@ -198,7 +205,7 @@ class IndicSttEngine(
                             windowSize = vadAsset.windowSizeSamples,
                         ),
                         sampleRate = vadAsset.sampleRateHz,
-                        numThreads = 1,
+                        numThreads = threads,
                         provider = "cpu",
                     ),
                 )
@@ -213,11 +220,7 @@ class IndicSttEngine(
                         modelConfig = OfflineModelConfig(
                             nemo = OfflineNemoEncDecCtcModelConfig(model = sttModelFile),
                             tokens = sttTokensFile,
-                            // 1 thread: low-end SoCs typically have 4-8 cores shared with
-                            // audio capture + UI + the mesh transport's own IO threads, so
-                            // a second ORT worker thread buys little latency at the cost of
-                            // extra scratch-buffer memory and scheduling contention.
-                            numThreads = 1,
+                            numThreads = threads,
                         ),
                         decodingMethod = "greedy_search",
                     ),
