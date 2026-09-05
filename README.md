@@ -36,9 +36,9 @@ No internet. No cell towers. No cloud. Speak in your language, the person on the
 
 <div align="center">
 
-<video src="docs/demo.mp4" controls width="360">Your browser doesn't support inline video — <a href="docs/demo.mp4">download/watch it here</a> instead.</video>
+![iTantra demo](docs/demo.gif)
 
-<sub>If the player above doesn't load, [watch/download the MP4 directly](docs/demo.mp4).</sub>
+<sub>GIF preview (no audio) — [watch the full video with sound](docs/demo.mp4).</sub>
 
 </div>
 
